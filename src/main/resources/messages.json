@@ -1,0 +1,26 @@
+{
+  "donate_chat": {
+    "prefix": "<gold>DonatChat</gold> <dark_grey>| ",
+    "message": "<prefix><player><grey>: <message></grey>",
+    "on": "<prefix><green>Вы включили чат донатеров",
+    "off": "<prefix><red>Вы выключили чат донатеров",
+    "error_disabled": "<red>Ошибка, вы выключили чат донатеров"
+  },
+  "staff_chat": {
+    "prefix": "<green>StaffChat</green> <dark_grey>| ",
+    "message": "<prefix><player><grey>: <message></grey>",
+    "on": "<prefix><green>Вы включили чат персонала",
+    "off": "<prefix><red>Вы выключили чат персонала",
+    "error_disabled": "<red>Ошибка, вы выключили чат персонала"
+  },
+  "player_chat": {
+    "prefix": "<blue>PlayerChat</blue> <dark_grey>| ",
+    "message": "<prefix><player><grey>: <message></grey>",
+    "on": "<prefix><green>Вы включили чат игроков",
+    "off": "<prefix><red>Вы выключили чат игроков",
+    "error_disabled": "<red>Ошибка, вы выключили чат игроков"
+  },
+  "not_enough_permissions": "<red>У вас недостаточно прав!",
+  "error_players_only_command": "<red>Эта команда только для игроков!",
+  "invalid_usage": "<red>Ошибка, неверное кол-во аргументов!"
+}
