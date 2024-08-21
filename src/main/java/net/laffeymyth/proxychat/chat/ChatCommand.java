@@ -76,10 +76,10 @@ public class ChatCommand extends LiteCommand<CommandSource> {
     private void changeChatState(ChatSetting chatSetting, Player player) {
         if (chatSetting.isEnabledChat(topicName)) {
             chatSetting.getEnabledChats().remove(topicName);
-            player.sendMessage(lang.getMessage(topicName + "_on", "ru", PREFIX_RESOLVER.apply(topicName)));
+            player.sendMessage(lang.getMessage(topicName + "_off", "ru", PREFIX_RESOLVER.apply(topicName)));
         } else {
             chatSetting.getEnabledChats().add(topicName);
-            player.sendMessage(lang.getMessage(topicName + "_off", "ru", PREFIX_RESOLVER.apply(topicName)));
+            player.sendMessage(lang.getMessage(topicName + "_on", "ru", PREFIX_RESOLVER.apply(topicName)));
         }
     }
 }
