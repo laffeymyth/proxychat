@@ -8,6 +8,7 @@ import net.laffeymyth.localization.commons.service.ComponentLocalizationService;
 import net.laffeymyth.localization.commons.util.ComponentResolver;
 import net.laffeymyth.proxychat.ProxyChat;
 import net.laffeymyth.proxychat.chat.dto.ChatSetting;
+import net.laffeymyth.proxychat.delay.DelayService;
 import net.laffeymyth.proxychat.displayname.DisplayNameService;
 import net.laffeymyth.proxychat.util.PrefixUtil;
 
@@ -23,8 +24,9 @@ public abstract class BaseChatService implements ChatService{
     private final Set<String> aliases;
     private final Set<String> subcommands;
     private final DisplayNameService displayNameService;
+    private final DelayService delayService;
 
-    public BaseChatService(ProxyChat proxyChat, String topicName, String permission, String command, Set<String> aliases, Set<String> subcommands, DisplayNameService displayNameService) {
+    public BaseChatService(ProxyChat proxyChat, String topicName, String permission, String command, Set<String> aliases, Set<String> subcommands, DisplayNameService displayNameService, DelayService delayService) {
         this.proxyServer = proxyChat.getProxy();
         this.chatSettingService = proxyChat.getChatSettingService();
         this.topicName = topicName;
@@ -33,11 +35,12 @@ public abstract class BaseChatService implements ChatService{
         this.aliases = aliases;
         this.subcommands = subcommands;
         this.displayNameService = displayNameService;
+        this.delayService = delayService;
     }
 
     @Override
     public LiteCommand<CommandSource> createCommand() {
-        return new ChatCommand(command, aliases, permission, this, chatSettingService, topicName, displayNameService, subcommands);
+        return new ChatCommand(command, aliases, permission, this, chatSettingService, topicName, displayNameService, subcommands, delayService);
     }
 
     @Override

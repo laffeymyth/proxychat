@@ -17,13 +17,12 @@ public class LocalizationFactory {
 
         MessageParser messageParser = new MessageParser();
 
-        messageParser.parse(ru, readerFromFileName("messages.json"));
-        messageParser.parse(ru, readerFromFileName("config.json"));
+        messageParser.parse(ru, readerFromFileName());
 
         ComponentLocalizationService.lang().getLanguageMap().put("ru", ru);
     }
 
-    private static Reader readerFromFileName(String fileName) {
-        return new InputStreamReader(Objects.requireNonNull(ProxyChat.class.getResourceAsStream("/" + fileName)), StandardCharsets.UTF_8);
+    private static Reader readerFromFileName() {
+        return new InputStreamReader(Objects.requireNonNull(ProxyChat.class.getResourceAsStream("/config.json")), StandardCharsets.UTF_8);
     }
 }

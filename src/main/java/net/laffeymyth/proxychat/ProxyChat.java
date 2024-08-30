@@ -17,6 +17,8 @@ import net.laffeymyth.proxychat.chat.ChatService;
 import net.laffeymyth.proxychat.chat.ChatSettingService;
 import net.laffeymyth.proxychat.chat.impl.RedissonChatService;
 import net.laffeymyth.proxychat.chat.impl.SingleChatService;
+import net.laffeymyth.proxychat.delay.DelayService;
+import net.laffeymyth.proxychat.delay.impl.DelayServiceImpl;
 import net.laffeymyth.proxychat.displayname.DefaultDisplayNameService;
 import net.laffeymyth.proxychat.displayname.DisplayNameService;
 import net.laffeymyth.proxychat.displayname.LuckPermsDisplayNameService;
@@ -55,6 +57,7 @@ public class ProxyChat {
     private ChatSettingService chatSettingService;
     private LuckPerms luckPerms;
     private DisplayNameService displayNameService;
+    private DelayService delayService;
     private boolean singleMod = false;
 
     @Subscribe
@@ -84,15 +87,16 @@ public class ProxyChat {
         }
 
         redissonClient = RedissonFactory.create();
+        delayService = new DelayServiceImpl(redissonClient.getMapCache("delay_map"));
         chatSettingService = new ChatSettingService(redissonClient.getMap("chat_setting_map"));
         proxy.getEventManager().register(this, chatSettingService);
     }
 
     private void createChat(String topicName, String permission, String command, Set<String> aliases, List<LiteCommand<CommandSource>> commandList) {
         if (singleMod) {
-            chatService = new RedissonChatService(this, topicName, permission, command, aliases, new HashSet<>(lang.getMessageList("config_change_setting_sub_commands", "ru")), displayNameService);
+            chatService = new RedissonChatService(this, topicName, permission, command, aliases, new HashSet<>(lang.getMessageList("config_change_setting_sub_commands", "ru")), displayNameService, delayService);
         } else {
-            chatService = new SingleChatService(this, topicName, permission, command, aliases, new HashSet<>(lang.getMessageList("config_change_setting_sub_commands", "ru")), displayNameService);
+            chatService = new SingleChatService(this, topicName, permission, command, aliases, new HashSet<>(lang.getMessageList("config_change_setting_sub_commands", "ru")), displayNameService, delayService);
         }
 
         chatService.registerListener();

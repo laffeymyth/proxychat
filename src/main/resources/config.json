@@ -5,5 +5,38 @@
     "single_mod": "true",
     "redis_password": "smartCookieLikeMe2008",
     "redid_address": "redis://127.0.0.1:6379"
-  }
+  },
+  "donate_chat": {
+    "prefix": "<gold>DonatChat</gold> <dark_grey>| ",
+    "message": "<prefix><player><grey>: <message></grey>",
+    "on": "<prefix><green>Вы включили чат донатеров",
+    "off": "<prefix><red>Вы выключили чат донатеров",
+    "error_disabled": "<red>Ошибка, вы выключили чат донатеров",
+    "display_name_format": "<prefix><player_name><suffix>",
+    "delay": "10",
+    "delay_error": "<red>Вы сможете писать только через <seconds> секунд"
+  },
+  "staff_chat": {
+    "prefix": "<green>StaffChat</green> <dark_grey>| ",
+    "message": "<prefix><player><grey>: <message></grey>",
+    "on": "<prefix><green>Вы включили чат персонала",
+    "off": "<prefix><red>Вы выключили чат персонала",
+    "error_disabled": "<red>Ошибка, вы выключили чат персонала",
+    "display_name_format": "<prefix><player_name><suffix>",
+    "delay": "0",
+    "delay_error": "<red>Вы сможете писать только через <seconds> секунд"
+  },
+  "player_chat": {
+    "prefix": "<blue>PlayerChat</blue> <dark_grey>| ",
+    "message": "<prefix><player><grey>: <message></grey>",
+    "on": "<prefix><green>Вы включили чат игроков",
+    "off": "<prefix><red>Вы выключили чат игроков",
+    "error_disabled": "<red>Ошибка, вы выключили чат игроков",
+    "display_name_format": "<prefix><player_name><suffix>",
+    "delay": "60",
+    "delay_error": "<red>Вы сможете писать только через <seconds> секунд"
+  },
+  "not_enough_permissions": "<red>У вас недостаточно прав!",
+  "error_players_only_command": "<red>Эта команда только для игроков!",
+  "invalid_usage": "<red>Ошибка, неверное кол-во аргументов!"
 }

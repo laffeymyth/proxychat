@@ -6,6 +6,7 @@ import net.laffeymyth.proxychat.ProxyChat;
 import net.laffeymyth.proxychat.chat.BaseChatService;
 import net.laffeymyth.proxychat.chat.ChatService;
 import net.laffeymyth.proxychat.chat.dto.ChatMessageDto;
+import net.laffeymyth.proxychat.delay.DelayService;
 import net.laffeymyth.proxychat.displayname.DisplayNameService;
 import org.redisson.api.RedissonClient;
 
@@ -16,8 +17,8 @@ public class RedissonChatService extends BaseChatService implements ChatService 
     private final RedissonClient redissonClient;
     private final String topicName;
 
-    public RedissonChatService(ProxyChat proxyChat, String topicName, String permission, String command, Set<String> aliases, Set<String> subcommands, DisplayNameService displayNameService) {
-        super(proxyChat, topicName, permission, command, aliases, subcommands, displayNameService);
+    public RedissonChatService(ProxyChat proxyChat, String topicName, String permission, String command, Set<String> aliases, Set<String> subcommands, DisplayNameService displayNameService, DelayService delayService) {
+        super(proxyChat, topicName, permission, command, aliases, subcommands, displayNameService, delayService);
         this.redissonClient = proxyChat.getRedissonClient();
         this.topicName = topicName;
     }
