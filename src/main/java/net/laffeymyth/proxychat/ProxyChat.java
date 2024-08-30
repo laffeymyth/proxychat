@@ -12,8 +12,14 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.programmatic.LiteCommand;
 import lombok.Getter;
+import net.laffeymyth.localization.commons.service.PlainLocalizationService;
 import net.laffeymyth.proxychat.chat.ChatService;
 import net.laffeymyth.proxychat.chat.ChatSettingService;
+import net.laffeymyth.proxychat.chat.impl.RedissonChatService;
+import net.laffeymyth.proxychat.chat.impl.SingleChatService;
+import net.laffeymyth.proxychat.displayname.DefaultDisplayNameService;
+import net.laffeymyth.proxychat.displayname.DisplayNameService;
+import net.laffeymyth.proxychat.displayname.LuckPermsDisplayNameService;
 import net.laffeymyth.proxychat.factory.CommandsFactory;
 import net.laffeymyth.proxychat.factory.LocalizationFactory;
 import net.laffeymyth.proxychat.factory.RedissonFactory;
@@ -24,17 +30,19 @@ import org.slf4j.Logger;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Plugin(
         id = "proxychat",
         name = "proxychat",
         version = "1.0-SNAPSHOT",
-        dependencies = {@Dependency(id = "luckperms")}
+        dependencies = {@Dependency(id = "luckperms", optional = true)}
 )
 public class ProxyChat {
-
+    private final PlainLocalizationService lang = PlainLocalizationService.lang();
     @Inject
     private ProxyServer proxy;
     @Inject
@@ -46,6 +54,8 @@ public class ProxyChat {
     private ChatService chatService;
     private ChatSettingService chatSettingService;
     private LuckPerms luckPerms;
+    private DisplayNameService displayNameService;
+    private boolean singleMod = false;
 
     @Subscribe
     public void onInit(ProxyInitializeEvent event) {
@@ -53,23 +63,38 @@ public class ProxyChat {
 
         List<LiteCommand<CommandSource>> commandList = new ArrayList<>();
 
-        createChat("donate_chat", "proxychat.donatechat", "donatechat", List.of("dc"), commandList);
-        createChat("player_chat", "proxychat.playerchat", "playerchat", List.of("pc"), commandList);
-        createChat("staff_chat", "proxychat.staffchat", "staffchat", List.of("sc"), commandList);
+        createChat("donate_chat", "proxychat.donatechat", "donatechat", Set.of("dc"), commandList);
+        createChat("player_chat", "proxychat.playerchat", "playerchat", Set.of("pc"), commandList);
+        createChat("staff_chat", "proxychat.staffchat", "staffchat", Set.of("sc"), commandList);
 
         liteCommands = new CommandsFactory(proxy, commandList).create();
     }
 
     private void initServices() {
-        luckPerms = LuckPermsProvider.get();
-        redissonClient = RedissonFactory.create();
         LocalizationFactory.initLocalization();
+
+        boolean luckPermsSupport = Boolean.parseBoolean(lang.getMessage("config_luck_perms", "ru"));
+        this.singleMod = Boolean.parseBoolean(lang.getMessage("single_mod", "ru"));
+
+        if (luckPermsSupport) {
+            luckPerms = LuckPermsProvider.get();
+            displayNameService = new LuckPermsDisplayNameService(luckPerms);
+        } else {
+            displayNameService = new DefaultDisplayNameService();
+        }
+
+        redissonClient = RedissonFactory.create();
         chatSettingService = new ChatSettingService(redissonClient.getMap("chat_setting_map"));
         proxy.getEventManager().register(this, chatSettingService);
     }
 
-    private void createChat(String topicName, String permission, String command, List<String> aliases, List<LiteCommand<CommandSource>> commandList) {
-        chatService = new ChatService(this, topicName, permission, command, aliases);
+    private void createChat(String topicName, String permission, String command, Set<String> aliases, List<LiteCommand<CommandSource>> commandList) {
+        if (singleMod) {
+            chatService = new RedissonChatService(this, topicName, permission, command, aliases, new HashSet<>(lang.getMessageList("config_change_setting_sub_commands", "ru")), displayNameService);
+        } else {
+            chatService = new SingleChatService(this, topicName, permission, command, aliases, new HashSet<>(lang.getMessageList("config_change_setting_sub_commands", "ru")), displayNameService);
+        }
+
         chatService.registerListener();
 
         commandList.add(chatService.createCommand());

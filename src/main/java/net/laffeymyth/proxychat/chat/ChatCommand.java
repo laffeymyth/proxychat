@@ -3,31 +3,30 @@ package net.laffeymyth.proxychat.chat;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import dev.rollczi.litecommands.programmatic.LiteCommand;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.laffeymyth.localization.commons.service.ComponentLocalizationService;
 import net.laffeymyth.proxychat.chat.dto.ChatSetting;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.model.user.User;
+import net.laffeymyth.proxychat.displayname.DisplayNameService;
 
-import java.util.List;
+import java.util.Set;
 
 import static net.laffeymyth.proxychat.util.PrefixUtil.PREFIX_RESOLVER;
 
 public class ChatCommand extends LiteCommand<CommandSource> {
     private final ComponentLocalizationService lang = ComponentLocalizationService.lang();
-    private final LegacyComponentSerializer legacyComponentSerializer = LegacyComponentSerializer.legacyAmpersand();
     private final String topicName;
 
     public ChatCommand(String name,
-                       List<String> aliases, String permission,
+                       Set<String> aliases,
+                       String permission,
                        ChatService chatService,
-                       LuckPerms luckPerms,
                        ChatSettingService chatSettingService,
-                       String topicName) {
-        super(name, aliases);
+                       String topicName, DisplayNameService displayNameService, Set<String> changeSettingSubcommand) {
+        super(name, aliases.stream().toList());
         this.topicName = topicName;
 
         permissions(permission);
+
+        argumentJoin("text");
 
         execute(context -> {
             CommandSource commandSource = context.invocation().sender();
@@ -40,7 +39,7 @@ public class ChatCommand extends LiteCommand<CommandSource> {
 
             ChatSetting chatSetting = chatSettingService.getChatSettingCacheMap().get(player);
 
-            if (text.equals("on") || text.equals("off")) {
+            if (changeSettingSubcommand.contains(text)) {
                 if (chatSetting == null) {
                     throw new RuntimeException("chatSetting is null");
                 }
@@ -54,21 +53,9 @@ public class ChatCommand extends LiteCommand<CommandSource> {
                 return;
             }
 
-            User user = luckPerms.getUserManager().getUser(player.getUsername());
-
-            if (user == null) {
-                throw new RuntimeException("user is null");
-            }
-
-            String prefix = user.getCachedData().getMetaData().getPrefix();
-
-            if (prefix == null) {
-                prefix = "&7";
-            }
-
             chatService.sendMessage(
                     player.getUsername(),
-                    legacyComponentSerializer.deserialize(prefix + player.getUsername()),
+                    displayNameService.getDisplayName(topicName, player),
                     text);
         });
     }

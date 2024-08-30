@@ -4,21 +4,24 @@
     "message": "<prefix><player><grey>: <message></grey>",
     "on": "<prefix><green>Вы включили чат донатеров",
     "off": "<prefix><red>Вы выключили чат донатеров",
-    "error_disabled": "<red>Ошибка, вы выключили чат донатеров"
+    "error_disabled": "<red>Ошибка, вы выключили чат донатеров",
+    "display_name_format": "<prefix><player_name><suffix>"
   },
   "staff_chat": {
     "prefix": "<green>StaffChat</green> <dark_grey>| ",
     "message": "<prefix><player><grey>: <message></grey>",
     "on": "<prefix><green>Вы включили чат персонала",
     "off": "<prefix><red>Вы выключили чат персонала",
-    "error_disabled": "<red>Ошибка, вы выключили чат персонала"
+    "error_disabled": "<red>Ошибка, вы выключили чат персонала",
+    "display_name_format": "<prefix><player_name><suffix>"
   },
   "player_chat": {
     "prefix": "<blue>PlayerChat</blue> <dark_grey>| ",
     "message": "<prefix><player><grey>: <message></grey>",
     "on": "<prefix><green>Вы включили чат игроков",
     "off": "<prefix><red>Вы выключили чат игроков",
-    "error_disabled": "<red>Ошибка, вы выключили чат игроков"
+    "error_disabled": "<red>Ошибка, вы выключили чат игроков",
+    "display_name_format": "<prefix><player_name><suffix>"
   },
   "not_enough_permissions": "<red>У вас недостаточно прав!",
   "error_players_only_command": "<red>Эта команда только для игроков!",

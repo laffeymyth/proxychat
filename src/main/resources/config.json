@@ -1,0 +1,9 @@
+{
+  "config": {
+    "change_setting_sub_commands": ["on", "off"],
+    "luck_perms": "false",
+    "single_mod": "true",
+    "redis_password": "smartCookieLikeMe2008",
+    "redid_address": "redis://127.0.0.1:6379"
+  }
+}

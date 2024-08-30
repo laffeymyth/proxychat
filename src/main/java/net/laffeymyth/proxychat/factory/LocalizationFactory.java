@@ -18,6 +18,7 @@ public class LocalizationFactory {
         MessageParser messageParser = new MessageParser();
 
         messageParser.parse(ru, readerFromFileName("messages.json"));
+        messageParser.parse(ru, readerFromFileName("config.json"));
 
         ComponentLocalizationService.lang().getLanguageMap().put("ru", ru);
     }
